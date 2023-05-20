@@ -4,6 +4,7 @@ import com.github.komidawi.interview.api.ApiFacade;
 import com.github.komidawi.interview.api.Barcode;
 import com.github.komidawi.interview.api.Money;
 import com.github.komidawi.interview.api.product.Product;
+import com.github.komidawi.interview.api.product.ProductNotFoundException;
 import com.github.komidawi.interview.api.product.ProductProviderApi;
 
 import java.util.*;
@@ -19,8 +20,13 @@ public class MainProcessor implements ApiFacade {
     }
 
     @Override
-    public void scanItem(Barcode barcode) {
+    public void scanItem(Barcode barcode) throws ProductNotFoundException {
         Product product = productProvider.findProduct(barcode);
+
+        if (product == null) {
+            throw new ProductNotFoundException("Product with barcode: " + barcode + " not found");
+        }
+
         bill.add(product);
     }
 
