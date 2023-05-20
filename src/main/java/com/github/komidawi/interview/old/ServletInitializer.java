@@ -1,4 +1,4 @@
-package com.github.komidawi.interview;
+package com.github.komidawi.interview.old;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

@@ -1,4 +1,4 @@
-package com.github.komidawi.interview;
+package com.github.komidawi.interview.old;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
