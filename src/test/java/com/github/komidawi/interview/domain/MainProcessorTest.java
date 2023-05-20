@@ -7,12 +7,15 @@ import com.github.komidawi.interview.api.product.Product;
 import com.github.komidawi.interview.api.product.ProductProviderApi;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MainProcessorTest {
-    private final ProductProviderApi productProviderApi = barcode ->
+    private final ProductProviderApi fakeProductProvider = barcode ->
             new Product(barcode, new Money(Integer.parseInt(barcode.value())));
-    private final ApiFacade mainProcessor = new MainProcessor(productProviderApi);
+    private final ApiFacade mainProcessor = new MainProcessor(fakeProductProvider);
 
     @Test
     public void afterScanningItem_itsPriceIsAddedToTotalSum() {
@@ -45,6 +48,22 @@ class MainProcessorTest {
         // then
         Money totalPrice = mainProcessor.getTotalPrice();
         assertEquals(new Money(firstItemPrice + secondItemPrice), totalPrice);
+    }
+
+    @Test
+    public void afterScanningNonExistentProduct_throwExceptionWithMessage() {
+        // given
+        ProductProviderApi noProductProvider = mock(ProductProviderApi.class);
+        when(noProductProvider.findProduct(any())).thenReturn(null);
+        ApiFacade mainProcessor = new MainProcessor(noProductProvider);
+
+        // when
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                mainProcessor.scanItem(new Barcode("123"))
+        );
+
+        // then
+        assertNotNull(exception);
     }
 }
 
