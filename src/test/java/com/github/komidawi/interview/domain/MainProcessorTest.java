@@ -59,12 +59,13 @@ class MainProcessorTest {
         ApiFacade mainProcessor = new MainProcessor(noProductProvider);
 
         // when
-        Exception exception = assertThrows(ProductNotFoundException.class, () ->
+        Exception productNotFoundException = assertThrows(ProductNotFoundException.class, () ->
                 mainProcessor.scanItem(new Barcode("123"))
         );
 
         // then
-        assertNotNull(exception);
+        assertNotNull(productNotFoundException);
+        assertEquals("Product with barcode: 123 not found", productNotFoundException.getMessage());
     }
 }
 

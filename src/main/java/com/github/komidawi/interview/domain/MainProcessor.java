@@ -24,7 +24,7 @@ public class MainProcessor implements ApiFacade {
         Product product = productProvider.findProduct(barcode);
 
         if (product == null) {
-            throw new ProductNotFoundException("Product with barcode: " + barcode + " not found");
+            throw new ProductNotFoundException("Product with barcode: " + barcode.value() + " not found");
         }
 
         bill.add(product);
